@@ -1,0 +1,37 @@
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+   id               String        @id @default(uuid())
+   username         String        @unique
+   password         String         
+   rooms            Room[]
+   chats            Chat[]
+}
+
+
+model Room {
+  id               Int           @id @default(autoincrement())
+  slug             String        @unique
+  adminId          String        
+  admin            User          @relation(fields: [adminId], references: [id])
+  chats            Chat[]
+}
+
+model Chat {
+  id               Int           @id @default(autoincrement())
+  message          String
+  roomId           Int
+  adminId          String
+  room             Room         @relation(fields: [roomId], references: [id])
+  admin            User         @relation(fields: [adminId], references: [id])
+}
