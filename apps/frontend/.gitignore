@@ -42,3 +42,4 @@ next-env.d.ts
 
 #initDraw
 apps/frontend/utils/initDraw.ts
+/utils/initDraw.ts
