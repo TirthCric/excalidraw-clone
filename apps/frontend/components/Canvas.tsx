@@ -1,7 +1,5 @@
 
 "use client";
-import initDraw from "@/utils/initDraw";
-import { WS_URL } from "@repo/common/config";
 import { useEffect, useRef, useState } from "react";
 import Toolbar from "./Toolbar";
 import { Game } from "@/utils/Game";
@@ -13,8 +11,9 @@ const Canvas = ({ roomId, socket }:
   }) => {
 
   const [canvasMessure, setCanvasMessure] = useState({ width: 500, height: 500 });
-  const [game, setGame] = useState<Game>();
+  const gameRef = useRef<Game>(undefined);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  
 
 
   useEffect(() => {
@@ -26,14 +25,20 @@ const Canvas = ({ roomId, socket }:
 
   useEffect(() => {
     if (!canvasRef.current || !socket) return;
-    const g = new Game("rect");
-    setGame(g);
-    initDraw(canvasRef.current, socket, roomId, g);
+    console.log("the game class run two times....");
+    let g;
+    if(!gameRef.current) {
+       g = new Game(canvasRef.current, roomId, socket);
+       g.init();
+      gameRef.current = g;
+    }
+    
+    // initDraw(canvasRef.current, socket, roomId, g);
   }, []);
 
   return (
     <div className="w-full h-dvh overflow-hidden">
-      <Toolbar game={game} />
+      <Toolbar game={gameRef.current} />
       <canvas ref={canvasRef} width={canvasMessure.width} height={canvasMessure.height}></canvas>
     </div>
   )

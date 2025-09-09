@@ -41,7 +41,6 @@ interface Line {
     toY: number,
 }
 export default async function initDraw(canvas: HTMLCanvasElement, socket: WebSocket, roomId: number, g: Game) {
-    console.log("gameStyle: ", g.selectedStyle);
     let existingShapes: Shape[] = await getExistingShapes(roomId);
     const ctx = canvas.getContext("2d");
     if (!ctx) return
@@ -72,8 +71,8 @@ export default async function initDraw(canvas: HTMLCanvasElement, socket: WebSoc
 
     canvas.addEventListener("mousemove", (e: MouseEvent) => {
         if (!isDragging) return;
-        // const width = e.clientX - startX;
-        // const height = e.clientY - startY;
+        const width = e.clientX - startX;
+        const height = e.clientY - startY;
         // clearCanvas(canvas, ctx, existingShapes);
         // ctx.strokeRect(startX, startY, width, height);
         let x1 = Math.min(startX, e.clientX);  // Left side (smallest X)
@@ -82,7 +81,14 @@ export default async function initDraw(canvas: HTMLCanvasElement, socket: WebSoc
         let y2 = Math.max(startY, e.clientY);  // Bottom side (largest Y)
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         // drawEllipse(ctx, x1, y1, x2, y2);
-        drawArrow(ctx, startX, startY, e.clientX, e.clientY);
+        // drawArrow(ctx, startX, startY, e.clientX, e.clientY);
+        if (g.getType() === "rect") {
+            ctx.strokeRect(startX, startY, width, height);
+        } else if (g.getType() === 'circle') {
+            drawEllipse(ctx, x1, y1, x2, y2)
+        } else if (g.getType() === 'line') {
+            drawArrow(ctx, startX, startY, e.clientX, e.clientY)
+        }
     })
 
     canvas.addEventListener("mouseup", (e) => {
@@ -195,3 +201,4 @@ function drawArrow(ctx: CanvasRenderingContext2D, fromX: number, fromY: number, 
     );
     ctx.stroke();
 }
+

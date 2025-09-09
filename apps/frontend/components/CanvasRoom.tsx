@@ -6,7 +6,6 @@ import Canvas from './Canvas';
 
 const CanvasRoom = ({ roomId }: { roomId: number }) => {
     const [socket, setSocket] = useState<WebSocket>();
-    const [shapes, setShapes] =  useState<string[]>([]);
     // Initialized websocket 
     useEffect(() => {
         // const ws = new WebSocket(`${WS_URL}/?token=${localStorage.getItem("token")}`);
@@ -23,7 +22,7 @@ const CanvasRoom = ({ roomId }: { roomId: number }) => {
     }
 
     return (
-        <div>
+        <div> 
             <Canvas roomId={roomId} socket = {socket} />
         </div>
     )
