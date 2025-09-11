@@ -21,3 +21,14 @@ export interface Line {
     toX: number,
     toY: number,
 }
+
+export interface TextElement {
+    id: string,
+    type: string,
+    text: string,
+    x: number,
+    y: number,
+    fontSize: number,
+    color: string,
+    isEditing?: boolean
+}
