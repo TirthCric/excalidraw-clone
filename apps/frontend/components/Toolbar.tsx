@@ -1,15 +1,23 @@
 
 "use client";
 
-import { Circle, MoveRight, Square } from "lucide-react";
+import { Circle, MousePointer, MoveRight, Square } from "lucide-react";
 import ToobarButton from "./ToobarButton";
 import { Game } from "@/utils/Game";
 import { useState } from "react";
 
 const Toolbar = ({ game }: { game?: Game }) => {
-  const [shapeType, setShapeStyle] = useState("rect");
+  const [shapeType, setShapeStyle] = useState("select");
   return (
     <div className="bg-bg rounded-md flex gap-1 p-1 px-4 fixed top-10 left-1/2 -translate-x-1/2">
+      <ToobarButton isActive={shapeType === 'select'} icon={<MousePointer className="size-4" />}
+        onClick={() => {
+          if(game){
+            game.setType("select")
+            setShapeStyle("select");
+          }
+        }} />
+
       <ToobarButton isActive={shapeType === 'rect'} icon={<Square className="size-4" />}
         onClick={() => {
           if(game){
